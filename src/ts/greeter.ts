@@ -5,3 +5,8 @@ function greeter(person: string) {
 let user = 'user';
 
 document.body.textContent = greeter(user);
+
+const headerWrapper = document.createElement('h1');
+headerWrapper.className = 'mainH1';
+headerWrapper.textContent = 'Webpack!!';
+document.body.append(headerWrapper);

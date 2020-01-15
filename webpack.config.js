@@ -1,5 +1,18 @@
 const path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const miniCssExtractPlugin = require("mini-css-extract-plugin");
+const postCss = require('postcss');
+const cssVariables = require('postcss-css-variables');
+
+const fs = require('fs');
+
+const mycss = fs.readFileSync('/dist/app.css', 'utf-8');
+
+var output = postCss([
+  cssVariables(/*options*/)
+])
+  .process(mycss)
+  .css;
+
 
 module.exports = {
   entry: {
@@ -27,7 +40,7 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          MiniCssExtractPlugin.loader,
+          miniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: { sourceMap: true }
@@ -42,7 +55,7 @@ module.exports = {
         test: /\.scss$/,
         use: [
           'style-loader',
-          MiniCssExtractPlugin.loader,
+          miniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: { sourceMap: true }
@@ -71,7 +84,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
-    new MiniCssExtractPlugin({
+    new miniCssExtractPlugin({
       filename: "[name].css",
     })
   ],
