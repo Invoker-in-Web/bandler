@@ -1,17 +1,5 @@
 const path = require('path');
 const miniCssExtractPlugin = require("mini-css-extract-plugin");
-const colors = require('./src/js/colors.js');
-const vars = require('postcss-simple-vars');
-
-require('postcss-mixins')({
-  mixinsDir: path.join(__dirname, './src/js/mixins.js')
-});
-
-vars({
-  variables: function () {
-    return colors;
-  }
-})
 
 module.exports = {
   entry: {
@@ -25,8 +13,6 @@ module.exports = {
   },
   devServer: {
     overlay: true,
-    historyApiFallback: true,
-    index: 'index.html'
   },
   module: {
     rules: [
