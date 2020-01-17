@@ -1,18 +1,17 @@
 const path = require('path');
 const miniCssExtractPlugin = require("mini-css-extract-plugin");
-const postCss = require('postcss');
-const cssVariables = require('postcss-css-variables');
+const colors = require('./src/js/colors.js');
+const vars = require('postcss-simple-vars');
 
-const fs = require('fs');
+require('postcss-mixins')({
+  mixinsDir: path.join(__dirname, './src/js/mixins.js')
+});
 
-const mycss = fs.readFileSync('/dist/app.css', 'utf-8');
-
-var output = postCss([
-  cssVariables(/*options*/)
-])
-  .process(mycss)
-  .css;
-
+vars({
+  variables: function () {
+    return colors;
+  }
+})
 
 module.exports = {
   entry: {
@@ -25,7 +24,9 @@ module.exports = {
     publicPath: '/dist'
   },
   devServer: {
-    overlay: true
+    overlay: true,
+    historyApiFallback: true,
+    index: 'index.html'
   },
   module: {
     rules: [
@@ -34,6 +35,11 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: '/node_modules/'
+      },
+      //HTML 
+      {
+        test: /\.html$/,
+        loader: "raw-loader"
       },
       //CSS
       {
@@ -50,7 +56,7 @@ module.exports = {
           }
         ]
       },
-      //SASS
+      //SCSS
       {
         test: /\.scss$/,
         use: [
@@ -62,9 +68,21 @@ module.exports = {
           }, {
             loader: 'postcss-loader',
             options: { sourceMap: true, config: { path: 'src/js/postcss.config.js' } }
-          }, {
-            loader: 'sass-loader',
+          }
+        ]
+      },
+      //PCSS
+      {
+        test: /\.pcss$/,
+        use: [
+          'style-loader',
+          miniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
             options: { sourceMap: true }
+          }, {
+            loader: 'postcss-loader',
+            options: { sourceMap: true, config: { path: 'src/js/postcss.config.js' } }
           }
         ]
       },
@@ -73,7 +91,7 @@ module.exports = {
         test: /\.tsx?/,
         use: 'ts-loader', // все файлы с расширением tsx будет обрабатывать ts-loader
         exclude: /node_modules/
-      }
+      },
     ],
     // preLoaders: [
     //   // Все карты кода для выходных '.js'-файлов будет дополнительно обрабатывать `source-map-loader`
@@ -87,5 +105,5 @@ module.exports = {
     new miniCssExtractPlugin({
       filename: "[name].css",
     })
-  ],
+  ]
 }

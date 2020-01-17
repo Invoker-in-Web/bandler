@@ -1,0 +1,33 @@
+$yellowColor: yellow;
+$blueColor: blue;
+$redColor: red;
+$borderSize: 5px;
+$borderType: solid;
+$borderColor: $blueColor;
+
+@define-mixin typicalBorder $borderSize $borderType $borderColor {
+  border: $borderSize $borderType $borderColor;
+}
+
+@define-mixin fontSize {
+  font-size: 50px;
+}
+
+.wrapper {
+  display: flex;
+}
+
+body {
+  display: flex;
+  background-color: $yellowColor;
+  ul{
+    .listElement{
+      list-style-type: none;
+       @mixin fontSize;
+      color: $redColor;
+      @mixin typicalBorder;
+    }
+  }
+}
+
+
